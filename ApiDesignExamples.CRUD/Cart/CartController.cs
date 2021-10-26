@@ -98,7 +98,7 @@ namespace ApiDesignExamples.CRUD.Cart
         [HttpPost("{id}/Items")]
         public Task AddItem(Guid id, [FromBody] Item item)
         {
-            return _cartRepository.AddItemToCart(id.ToString(), item.ProductId.ToString(), item.Quantity);
+            return _cartRepository.AddItemToCart(id, item.ProductId, item.Quantity);
         }
 
         [HttpDelete("{id}/Items/{itemId}")]

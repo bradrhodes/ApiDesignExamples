@@ -6,7 +6,7 @@ namespace ApiDesignExamples.CRUD.Cart
 {
     public interface IGenericCartRepository
     {
-        Task AddItemToCart(string id, string productId, int quantity);
+        Task AddItemToCart(Guid id, Guid productId, int quantity);
 
         Task<IEnumerable<CartItem>> GetCartItemsById(Guid id);
 

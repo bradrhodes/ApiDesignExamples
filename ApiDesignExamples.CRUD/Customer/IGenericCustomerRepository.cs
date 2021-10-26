@@ -8,7 +8,8 @@ namespace ApiDesignExamples.CRUD.Customer
     {
         Task Create(Customer customer);
         Task<IEnumerable<Customer>> Get(Guid customerId);
+        Task<IEnumerable<Customer>> GetAll();
         Task Update(Customer customer);
-        Task Delete(Customer customer);
+        Task Delete(Guid customer);
     }
 }

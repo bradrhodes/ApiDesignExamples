@@ -1,9 +1,11 @@
-﻿namespace ApiDesignExamples.CRUD.Cart
+﻿using System;
+
+namespace ApiDesignExamples.CRUD.Cart
 {
     public record CartItem
     {
-        public string CartId { get; init; }
-        public string ProductId { get; set; }
+        public Guid CartId { get; init; }
+        public Guid ProductId { get; set; }
         public int Quantity { get; set; }
     }
 }

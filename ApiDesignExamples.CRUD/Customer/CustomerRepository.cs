@@ -34,6 +34,13 @@ namespace ApiDesignExamples.CRUD.Customer
                 "SELECT * FROM Customer WHERE Id = @Id;", new {Id = customerId});
         }
 
+        public async Task<IEnumerable<Customer>> GetAll()
+        {
+            await using var connection = GetConnection();
+
+            return await connection.QueryAsync<Customer>("SELECT * FROM Customer;");
+        }
+
         public async Task Update(Customer customer)
         {
             await using var connection = GetConnection();
@@ -44,14 +51,14 @@ namespace ApiDesignExamples.CRUD.Customer
                 customer).ConfigureAwait(false);
         }
 
-        public async Task Delete(Customer customer)
+        public async Task Delete(Guid id)
         {
             await using var connection = GetConnection();
 
             await connection.ExecuteAsync(
                 "DELECT FROM Customer " +
                 "WHERE Id = @Id", 
-                customer).ConfigureAwait(false);
+                new {Id = id}).ConfigureAwait(false);
         }
 
         private SqliteConnection GetConnection()

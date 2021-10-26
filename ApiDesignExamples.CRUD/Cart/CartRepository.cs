@@ -17,7 +17,7 @@ namespace ApiDesignExamples.CRUD.Cart
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
-        public async Task AddItemToCart(string id, string productId, int quantity)
+        public async Task AddItemToCart(Guid id, Guid productId, int quantity)
         {
             await using var connection = new SqliteConnection(_config.Name);
             await connection.ExecuteAsync(
@@ -71,7 +71,7 @@ namespace ApiDesignExamples.CRUD.Cart
 
         public Task AlterQuantity(Guid cartId, Guid productId, int newQuantity)
         {
-            return AddItemToCart(cartId.ToString(), productId.ToString(), newQuantity);
+            return AddItemToCart(cartId, productId, newQuantity);
         }
     }
 }
