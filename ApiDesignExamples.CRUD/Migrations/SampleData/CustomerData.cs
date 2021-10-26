@@ -95,7 +95,7 @@ namespace ApiDesignExamples.CRUD.Migrations.SampleData
 
             return customerData.Select(c => new Customer.Customer
             {
-                Id = c.Id,
+                Id = new Guid(c.Id),
                 FirstName = c.FirstName,
                 LastName = c.LastName
             });

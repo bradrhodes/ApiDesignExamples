@@ -81,7 +81,7 @@ namespace ApiDesignExamples.CRUD.Migrations.SampleData
 
             return data.Select(d => new Product.Product
             {
-                Id = d.Id,
+                Id = new Guid(d.Id),
                 Name = d.Name
             });
         }
