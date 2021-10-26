@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,9 +7,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using ApiDesignExamples.CRUD.Cart;
 using ApiDesignExamples.CRUD.Customer;
+using ApiDesignExamples.CRUD.Dapper;
 using ApiDesignExamples.CRUD.Migrations;
 using ApiDesignExamples.CRUD.Migrations.SampleData;
 using ApiDesignExamples.CRUD.Product;
+using Dapper;
 using FluentMigrator.Runner;
 
 namespace ApiDesignExamples.CRUD
@@ -48,6 +51,12 @@ namespace ApiDesignExamples.CRUD
 
             services.AddSingleton<CustomerData>();
             services.AddSingleton<ProductData>();
+
+
+            // Dapper configuration
+            SqlMapper.RemoveTypeMap(typeof(Guid));
+            SqlMapper.RemoveTypeMap(typeof(Guid?));
+            SqlMapper.AddTypeHandler(new GuidTypeMapper());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
