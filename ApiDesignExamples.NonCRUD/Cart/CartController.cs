@@ -22,32 +22,30 @@ namespace ApiDesignExamples.NonCRUD.Cart
         }
 
         // GET: api/<CartController>
-        [HttpGet]
+        [HttpGet("GetAllCarts")]
         public Task<IEnumerable<Cart>> Get()
             => _mediator.Send(new GetAllCartsQuery());
 
         // GET api/<CartController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        public Task<Cart> Get(Guid id)
+            => _mediator.Send(new GetCartByIdQuery {Id = id});
 
         // POST api/<CartController>
-        [HttpPost]
+        [HttpPost("AddItemToCart")]
         public Task AddItemToCart([FromBody] AddItemToCartRequest request)
-            => _mediator.Send(new AddItemToCartCommand {CardId = request.CardId, Item = request.Item});
-
-        // PUT api/<CartController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            => _mediator.Send(new AddItemToCartCommand {CardId = request.CardId, ProductId = request.ProductId, Quantity = request.Quantity});
 
         // DELETE api/<CartController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        [HttpDelete("{id}/RemoveItemFromCart/{itemId}")]
+        public Task Delete(Guid id, Guid itemId)
+            => _mediator.Send(new RemoveItemFromCartCommand {CartId = id, ItemId = itemId});
+
+        [HttpPost("{id}/AdjustQuantityOfItem")]
+        public Task AdjustQuantityOfItem(Guid id, [FromBody] AdjustQuantityOfItemRequest request)
+            => _mediator.Send(new AdjustQuantityOfItemCommand
+                {CartId = id, ProductId = request.ProductId, Quantity = request.Quantity});
+
     }
+
 }

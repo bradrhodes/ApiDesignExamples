@@ -2,9 +2,8 @@
 
 namespace ApiDesignExamples.NonCRUD.Cart
 {
-    public record AddItemToCartRequest
+    public record AdjustQuantityOfItemRequest
     {
-        public Guid CardId { get; init; }
         public Guid ProductId { get; init; }
         public int Quantity { get; init; }
     }
