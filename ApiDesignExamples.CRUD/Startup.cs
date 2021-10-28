@@ -10,7 +10,9 @@ using ApiDesignExamples.CRUD.Customer;
 using ApiDesignExamples.CRUD.Dapper;
 using ApiDesignExamples.CRUD.Migrations;
 using ApiDesignExamples.CRUD.Migrations.SampleData;
+using ApiDesignExamples.CRUD.Order;
 using ApiDesignExamples.CRUD.Product;
+using ApiDesignExamples.CRUD.ShippingInfo;
 using Dapper;
 using FluentMigrator.Runner;
 
@@ -48,10 +50,11 @@ namespace ApiDesignExamples.CRUD
             services.AddSingleton<IGenericCustomerRepository, CustomerRepository>();
             services.AddSingleton<IGenericProductRepository, ProductRepository>();
             services.AddSingleton<IGenericCartRepository, CartRepository>();
+            services.AddSingleton<IGenericShippingInfoRepository, ShippingInfoRepository>();
+            services.AddSingleton<IGenericOrderRepository, OrderRepository>();
 
             services.AddSingleton<CustomerData>();
             services.AddSingleton<ProductData>();
-
 
             // Dapper configuration
             SqlMapper.RemoveTypeMap(typeof(Guid));
