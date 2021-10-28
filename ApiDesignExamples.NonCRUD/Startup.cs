@@ -9,7 +9,15 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using ApiDesignExamples.CRUD;
+using ApiDesignExamples.NonCRUD.Dapper;
+using ApiDesignExamples.NonCRUD.Migrations;
+using ApiDesignExamples.NonCRUD.Migrations.SampleData;
+using Dapper;
+using FluentMigrator.Runner;
+using MediatR;
 
 namespace ApiDesignExamples.NonCRUD
 {
@@ -25,12 +33,30 @@ namespace ApiDesignExamples.NonCRUD
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            const string dbName = "Data Source=NonCrudDb.db";
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiDesignExamples.NonCRUD", Version = "v1" });
             });
+            services.AddLogging(c => c.AddFluentMigratorConsole())
+                .AddFluentMigratorCore()
+                .ConfigureRunner(c => c
+                    .AddSQLite()
+                    .WithGlobalConnectionString(dbName)
+                    .ScanIn(typeof(Migrations.Migration_20211015151500).Assembly).For.Migrations());
+
+            services.AddSingleton(new DatabaseConfig {Name = dbName});
+            services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
+
+            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
+
+            services.AddSingleton<ProductData>();
+
+            SqlMapper.RemoveTypeMap(typeof(Guid));
+            SqlMapper.RemoveTypeMap(typeof(Guid?));
+            SqlMapper.AddTypeHandler(new GuidTypeMapper());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +77,9 @@ namespace ApiDesignExamples.NonCRUD
             {
                 endpoints.MapControllers();
             });
+
+            app.Migrate();
+            app.PrePopulate();
         }
     }
 }
